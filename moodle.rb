@@ -31,7 +31,6 @@ database 'Moodle' do
 	anonymize('lastname').using FieldStrategy::RandomLastName.new
 	anonymize('username').using FieldStrategy::RandomUserName.new
 	anonymize('email').using FieldStrategy::RandomEmail.new('example','com')
-    anonymize('password') {|field| 'password' }
 	anonymize('institution').using FieldStrategy::RandomProvince.region_US
     anonymize('password').using FieldStrategy::RandomMD5.new
     anonymize('icq').using FieldStrategy::RandomInteger.new(5000,10000)
