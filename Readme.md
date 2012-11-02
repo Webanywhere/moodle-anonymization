@@ -1,7 +1,7 @@
 Moodle User Anonymizer
 ======================
 
-Set your database connection details on line 19 and run with 'ruby moodle.rb'
+Set your database connection details on line 25 and run with 'ruby moodle.rb'
 
 You can optionally set a password for all users, or uncomment out the line which sets random passwords.  Note that this randomises passwords for all users, including the admin account.
 

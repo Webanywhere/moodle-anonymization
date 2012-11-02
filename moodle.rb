@@ -1,10 +1,16 @@
 require 'data-anonymization'
 require 'mysql'
+require 'faker'
 
 module DataAnon
   module Strategy
     module Field
-      class MD5FieldStrategy
+      class RandomIPAddress
+        def anonymize field
+          Faker::Internet.ip_v4_address
+        end
+      end
+      class RandomMD5
         def anonymize field
           #Digest::MD5.hexdigest(DataAnon::Utils::RandomString.generate(5))
           Digest::MD5.hexdigest('password');
@@ -16,7 +22,7 @@ end
 
 database 'Moodle' do
   strategy DataAnon::Strategy::Blacklist
-  source_db :adapter => 'mysql', :database => 'moodle', :username => 'root', :password => 'password'
+  source_db :adapter => 'mysql', :database => 'moodle', :username => 'user', :password => 'password'
   table 'mdl_user' do
     primary_key 'id'
     anonymize('firstname').using FieldStrategy::RandomFirstName.new
@@ -25,7 +31,7 @@ database 'Moodle' do
 	anonymize('email').using FieldStrategy::RandomEmail.new('example','com')
     anonymize('password') {|field| 'password' }
 	anonymize('institution').using FieldStrategy::RandomProvince.region_US
-    anonymize('password').using FieldStrategy::MD5FieldStrategy.new
+    anonymize('password').using FieldStrategy::RandomMD5.new
     anonymize('icq').using FieldStrategy::RandomInteger.new(5000,10000)
 	anonymize('skype').using FieldStrategy::RandomUserName.new
 	anonymize('yahoo').using FieldStrategy::RandomUserName.new
@@ -35,7 +41,7 @@ database 'Moodle' do
 	anonymize('phone2').using FieldStrategy::RandomPhoneNumber.new
 	anonymize('address').using FieldStrategy::RandomAddress.region_UK
 	anonymize('city').using FieldStrategy::RandomCity.region_UK
-	anonymize('lastip').using FieldStrategy::RandomUrl.new
+	anonymize('lastip').using FieldStrategy::RandomIPAddress.new
 	anonymize('url').using FieldStrategy::RandomUrl.new
 	anonymize 'description', 'imagealt'	
   end
