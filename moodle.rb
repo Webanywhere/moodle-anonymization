@@ -7,7 +7,9 @@ module DataAnon
     module Field
       class RandomIPAddress
         def anonymize field
-          Faker::Internet.ip_v4_address
+          if field.value.length > 1
+            return Faker::Internet.ip_v4_address
+          end
         end
       end
       class RandomMD5
